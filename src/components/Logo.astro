@@ -9,9 +9,6 @@ const { variant = 'default' } = Astro.props;
 <style>
   .logo {
     --mark-size: 2.9rem;
-    --mark-scale: 2.3208;
-    --mark-x: 0.6563;
-    --mark-y: 0.2333;
 
     display: inline-flex;
     align-items: center;
@@ -37,7 +34,6 @@ const { variant = 'default' } = Astro.props;
   }
 
   .logo__mark {
-    position: relative;
     width: var(--mark-size);
     height: var(--mark-size);
     overflow: hidden;
@@ -45,12 +41,8 @@ const { variant = 'default' } = Astro.props;
   }
 
   .logo__mark img {
-    position: absolute;
-    max-width: none;
-    width: calc(var(--mark-size) * var(--mark-scale));
-    height: auto;
-    left: calc(var(--mark-size) * var(--mark-x) * -1);
-    top: calc(var(--mark-size) * var(--mark-y) * -1);
+    width: 100%;
+    height: 100%;
   }
 
   .logo__text {
@@ -61,7 +53,8 @@ const { variant = 'default' } = Astro.props;
 
   .logo__name {
     font-family: var(--font-body);
-    font-size: 1.12rem;
+    font-size: 1.02rem;
+    white-space: nowrap;
     font-weight: 400;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -84,8 +77,8 @@ const { variant = 'default' } = Astro.props;
     }
 
     .logo__name {
-      font-size: 0.92rem;
-      letter-spacing: 0.16em;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
     }
 
     .logo__tagline {
@@ -97,12 +90,12 @@ const { variant = 'default' } = Astro.props;
 <span class:list={['logo', `logo--${variant}`]}>
   <span class="logo__badge">
     <span class="logo__mark">
-      <img src="/logo.png" alt="" width="557" height="448" loading="eager" decoding="async" />
+      <img src="/logo.png" alt="" width="512" height="512" loading="eager" decoding="async" />
     </span>
   </span>
 
   <span class="logo__text">
-    <span class="logo__name">Simply Sorted</span>
+    <span class="logo__name">The Sorted Sequoia</span>
     <span class="logo__tagline">The art of everyday order</span>
   </span>
 </span>

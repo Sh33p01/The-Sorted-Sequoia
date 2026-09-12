@@ -1,8 +1,8 @@
 export const site = {
-  name: 'Simply Sorted',
+  name: 'The Sorted Sequoia',
   tagline: 'The art of everyday order',
 
-  email: 'office.simplysorted@gmail.com',
+  email: 'thesortedsequoia@gmail.com',
 
   phone: {
     publish: false,
@@ -22,8 +22,8 @@ export const site = {
   geo: { lat: -25.8603, lng: 28.1894 },
 
   social: {
-    facebook: '',
-    instagram: '',
+    facebook: 'https://www.facebook.com/profile.php?id=61594239054196',
+    instagram: 'https://www.instagram.com/thesortedsequoia/',
   },
 
   responseTime: 'within 1–2 business days',

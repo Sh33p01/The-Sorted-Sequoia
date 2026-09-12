@@ -4,7 +4,7 @@
     {
       // F5 -> starts the dev server, waits for it, opens the site.
       // Edits to any file in src/ hot-reload in the browser on save.
-      "name": "Run Simply Sorted",
+      "name": "Run The Sorted Sequoia",
       "type": "msedge",
       "request": "launch",
       "url": "http://localhost:4321",
@@ -15,7 +15,7 @@
     },
     {
       // Same thing, if you prefer Chrome.
-      "name": "Run Simply Sorted (Chrome)",
+      "name": "Run The Sorted Sequoia (Chrome)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4321",

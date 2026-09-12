@@ -5,9 +5,9 @@ import Photo from '../components/Photo.astro';
 import { site } from '../data/site.js';
 import { photos } from '../data/photos';
 
-const title = 'About Simply Sorted | Professional Organisers in Centurion';
+const title = 'About The Sorted Sequoia | Professional Organisers in Centurion';
 const description =
-  'Simply Sorted is a professional organising business serving Centurion and Pretoria. A calm, respectful, judgement-free approach to decluttering and organising homes.';
+  'The Sorted Sequoia is a professional organising business serving Centurion and Pretoria. A calm, respectful, judgement-free approach to decluttering and organising homes.';
 
 const values = [
   {
@@ -50,19 +50,12 @@ const values = [
     margin-block-start: var(--space-2xs);
   }
 
-  .intro__name {
-    margin-block-start: var(--space-md);
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
+  .intro__title-lead {
+    display: block;
   }
 
-  .intro__name strong {
-    font-size: var(--step-1);
-    font-weight: 600;
-  }
-
-  .intro__name span {
+  .intro__meta {
+    margin-block-start: var(--space-sm);
     font-size: var(--step--1);
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -138,7 +131,7 @@ const values = [
       <div class="intro__media reveal">
         <Photo
           src={photos.aboutTeam}
-          alt="The Simply Sorted team at work in a client's home."
+          alt="The The Sorted Sequoia team at work in a client's home."
           ratio="4 / 5"
           sizes="(min-width: 62rem) 26rem, 92vw"
           loading="eager"
@@ -147,11 +140,11 @@ const values = [
 
       <div class="intro__copy">
         <p class="eyebrow">About us</p>
-        <h1 class="intro__title">Welcome to Simply Sorted.</h1>
-        <p class="intro__name">
-          <strong>{site.name}</strong>
-          <span>{site.tagline} &middot; {site.area.label}</span>
-        </p>
+        <h1 class="intro__title">
+          <span class="intro__title-lead">Welcome to</span>{' '}
+          {site.name}.
+        </h1>
+        <p class="intro__meta">{site.tagline} &middot; {site.area.label}</p>
         <hr class="rule" />
 
         <div class="prose">

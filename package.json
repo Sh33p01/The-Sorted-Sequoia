@@ -1,9 +1,9 @@
 {
-  "name": "simply-sorted",
+  "name": "the-sorted-sequoia",
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "Simply Sorted - professional decluttering and home organising, Centurion & Pretoria",
+  "description": "The Sorted Sequoia - professional decluttering and home organising, Centurion & Pretoria",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

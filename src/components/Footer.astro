@@ -3,7 +3,24 @@ import Logo from './Logo.astro';
 import { site, nav, services } from '../data/site.js';
 
 const year = new Date().getFullYear();
-const socials = Object.entries(site.social).filter(([, url]) => url);
+const socialIcons: Record<string, string> = {
+  facebook:
+    '<circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+    '<path d="M13.55 8.7h1.65V6.42a21 21 0 0 0-2.03-.1c-2.01 0-3.39 1.23-3.39 3.48v1.94H8.05v2.55h1.73v6.19h2.59v-6.19h1.99l.33-2.55h-2.32V10.1c0-.74.25-1.4 1.18-1.4z" fill="currentColor"/>',
+  instagram:
+    '<rect x="3.3" y="3.3" width="17.4" height="17.4" rx="5" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+    '<circle cx="12" cy="12" r="4.05" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+    '<circle cx="16.9" cy="7.1" r="1.15" fill="currentColor"/>',
+};
+
+const socials = Object.entries(site.social)
+  .filter(([platform, url]) => url && socialIcons[platform])
+  .map(([platform, url]) => ({
+    platform,
+    url,
+    label: platform.charAt(0).toUpperCase() + platform.slice(1),
+    icon: socialIcons[platform],
+  }));
 ---
 
 <style>
@@ -77,17 +94,36 @@ const socials = Object.entries(site.social).filter(([, url]) => url);
 
   .footer__social {
     display: flex;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
     list-style: none;
     margin: var(--space-md) 0 0;
     padding: 0;
   }
 
   .footer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
     color: var(--linen);
-    font-size: var(--step--1);
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+    border: 1px solid rgba(244, 241, 235, 0.3);
+    border-radius: 50%;
+    transition: color var(--duration) var(--ease),
+                border-color var(--duration) var(--ease),
+                background-color var(--duration) var(--ease);
+  }
+
+  .footer__social a:hover,
+  .footer__social a:focus-visible {
+    color: var(--evergreen);
+    background-color: var(--linen);
+    border-color: var(--linen);
+  }
+
+  .footer__social svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
   .footer__bottom {
@@ -164,11 +200,14 @@ const socials = Object.entries(site.social).filter(([, url]) => url);
 
       {socials.length > 0 && (
         <ul class="footer__social">
-          {socials.map(([platform, url]) => (
+          {socials.map((social) => (
             <li>
-              <a href={url} rel="noopener noreferrer" target="_blank">
-                <span class="footer__social-label">
-                  {platform.charAt(0).toUpperCase() + platform.slice(1)}
+              <a href={social.url} rel="noopener noreferrer" target="_blank">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <Fragment set:html={social.icon} />
+                </svg>
+                <span class="visually-hidden">
+                  {site.name} on {social.label}
                 </span>
               </a>
             </li>

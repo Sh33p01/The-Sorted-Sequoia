@@ -3,7 +3,7 @@
   "tasks": [
     {
       // Long-running dev server with hot reload. Started automatically by the
-      // "Run Simply Sorted" launch config — you shouldn't need to run it by hand.
+      // "Run The Sorted Sequoia" launch config — you shouldn't need to run it by hand.
       "label": "dev server",
       "type": "shell",
       "command": "npm run dev",

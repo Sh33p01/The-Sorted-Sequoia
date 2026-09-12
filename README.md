@@ -1,6 +1,6 @@
-# Simply Sorted
+# The Sorted Sequoia
 
-Brochure site for **Simply Sorted** - professional decluttering and home organising
+Brochure site for **The Sorted Sequoia** - professional decluttering and home organising
 by Carolyn Kriel, serving Centurion & greater Pretoria.
 
 Built with [Astro](https://astro.build). Outputs plain static HTML - no server,
@@ -43,8 +43,8 @@ Each of these is marked with a `TODO` or `PLACEHOLDER` comment in the code.
 
 | Item | Where | Notes |
 | --- | --- | --- |
-| **Web3Forms access key** | `src/components/EnquiryForm.astro` | Sign up against `office.simplysorted@gmail.com`, paste the key. Until then the form validates but shows a "not connected" notice instead of silently failing. |
-| **Final domain** | `astro.config.mjs`, `public/robots.txt` | Drives canonical URLs, sitemap and schema. Currently `simplysorted.co.za`. |
+| **Web3Forms access key** | `src/components/EnquiryForm.astro` | Sign up against `thesortedsequoia@gmail.com`, paste the key. Until then the form validates but shows a "not connected" notice instead of silently failing. |
+| **Final domain** | `astro.config.mjs`, `public/robots.txt` | Drives canonical URLs, sitemap and schema. No domain chosen yet - points at the Workers URL. |
 | **Phone / WhatsApp** | `src/data/site.js` → `phone.publish` | Set to `true` once Carolyn confirms a number. Call + WhatsApp buttons and the schema `telephone` appear automatically. |
 | **Social links** | `src/data/site.js` → `social` | Empty strings are skipped in the footer. Fill in to show them. |
 | **Logo artwork** | `src/components/Logo.astro` | Currently an SVG recreation of the client's supplied mark. Drop the real file in `public/` and swap in an `<img>`. |

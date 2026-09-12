@@ -4,4 +4,4 @@
 User-agent: *
 Disallow: /
 
-Sitemap: https://simplysorted.office-simplysorted.workers.dev/sitemap-index.xml
+Sitemap: https://thesortedsequoia.office-simplysorted.workers.dev/sitemap-index.xml

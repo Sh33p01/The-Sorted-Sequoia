@@ -1,11 +1,11 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-// TODO(launch): simplysorted.co.za belongs to a different business. Points at
-// the Workers URL until a domain is chosen, so that no canonical, sitemap or
-// og:image URL claims a domain we don't own. Drives canonicals, the sitemap and
-// the LocalBusiness schema.
-const SITE = 'https://simplysorted.office-simplysorted.workers.dev';
+// TODO(launch): the business is now The Sorted Sequoia - no domain chosen yet.
+// Points at the Workers URL so that no canonical, sitemap or og:image URL
+// claims a domain we don't own. Drives canonicals, the sitemap and the
+// LocalBusiness schema.
+const SITE = 'https://thesortedsequoia.office-simplysorted.workers.dev';
 
 export default defineConfig({
   site: SITE,
