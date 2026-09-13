@@ -150,6 +150,22 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
     cursor: progress;
   }
 
+  .form-submit[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .form-hint {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .form-hint[hidden] {
+    display: none;
+  }
+
   .form-notice {
     margin: 0;
     padding: var(--space-xs) var(--space-sm);
@@ -233,6 +249,7 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
         name="name"
         type="text"
         autocomplete="name"
+        maxlength="80"
         required
         aria-describedby={`${id}-name-error`}
       />
@@ -247,6 +264,7 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
         type="email"
         inputmode="email"
         autocomplete="email"
+        maxlength="120"
         required
         aria-describedby={`${id}-email-error`}
       />
@@ -264,6 +282,7 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
           type="tel"
           inputmode="tel"
           autocomplete="tel"
+          maxlength="20"
           aria-describedby={`${id}-phone-error`}
         />
         <p class="error" id={`${id}-phone-error`} data-error-for="phone" hidden></p>
@@ -276,6 +295,7 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
           name="suburb"
           type="text"
           autocomplete="address-level2"
+          maxlength="80"
           placeholder="e.g. Eldoraigne, Centurion"
           required
           aria-describedby={`${id}-suburb-error`}
@@ -305,13 +325,18 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
         id={`${id}-message`}
         name="message"
         rows={5}
+        maxlength="2000"
         placeholder="Tell us a little about the space you'd like sorted."
+        aria-describedby={`${id}-message-error`}
       ></textarea>
+      <p class="error" id={`${id}-message-error`} data-error-for="message" hidden></p>
     </div>
 
     <button type="submit" class="button form-submit" data-submit>
       <span data-submit-label>Send my enquiry</span>
     </button>
+
+    <p class="form-hint" data-submit-hint hidden></p>
 
     {!isConfigured && (
       <p class="form-notice">
@@ -343,26 +368,47 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
 </div>
 
 <script>
-  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i;
+  const HAS_LETTER = /\p{L}/u;
+
+  const digitsOf = (v: string) => v.replace(/[\s()\-.]/g, '');
 
   type Rule = { message: string; test: (value: string) => boolean };
 
   const RULES: Record<string, Rule> = {
     name: {
       message: 'Please enter your name so we know who we’re talking to.',
-      test: (v) => v.trim().length >= 2,
+      test: (v) => {
+        const t = v.trim();
+        return t.length >= 2 && t.length <= 80 && HAS_LETTER.test(t);
+      },
     },
     email: {
-      message: 'Please enter a valid email address so we can reply.',
-      test: (v) => EMAIL_RE.test(v.trim()),
+      message: 'Please enter a valid email address - it needs an @ and a domain, like you@example.co.za.',
+      test: (v) => {
+        const t = v.trim();
+        return t.length <= 120 && EMAIL_RE.test(t) && !t.includes('..');
+      },
     },
     suburb: {
       message: 'Please tell us your suburb or area so we know if we cover it.',
-      test: (v) => v.trim().length >= 2,
+      test: (v) => {
+        const t = v.trim();
+        return t.length >= 2 && t.length <= 80 && HAS_LETTER.test(t);
+      },
     },
     phone: {
-      message: 'That number doesn’t look right - or leave it blank.',
-      test: (v) => v.trim() === '' || /^[+\d][\d\s()-]{7,}$/.test(v.trim()),
+      message: 'Please enter a 10-digit number like 082 123 4567, or +27 82 123 4567 - or leave it blank.',
+      test: (v) => {
+        const t = v.trim();
+        if (t === '') return true;
+        const d = digitsOf(t);
+        return /^0\d{9}$/.test(d) || /^(?:\+27|0027|27)\d{9}$/.test(d);
+      },
+    },
+    message: {
+      message: 'That message is too long - please keep it under 2000 characters.',
+      test: (v) => v.trim().length <= 2000,
     },
   };
 
@@ -381,6 +427,16 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
       );
       if (select && match) select.value = match.value;
     }
+
+    const FIELD_LABELS: Record<string, string> = {
+      name: 'your name',
+      email: 'your email',
+      suburb: 'your suburb or area',
+      phone: 'your contact number',
+      message: 'your message',
+    };
+
+    const labelFor = (name: string) => FIELD_LABELS[name] ?? name;
 
     const fieldFor = (name: string) =>
       form.querySelector<HTMLInputElement>(`[name="${name}"]`);
@@ -401,15 +457,60 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
       return ok;
     };
 
+    const REQUIRED = ['name', 'email', 'suburb'];
+
+    const missing = () =>
+      REQUIRED.filter((name) => {
+        const input = fieldFor(name);
+        return !input || input.value.trim() === '';
+      });
+
+    const badlyFilled = () =>
+      Object.keys(RULES).filter((name) => {
+        const input = fieldFor(name);
+        return input ? !RULES[name].test(input.value) : false;
+      });
+
+    const hint = form.querySelector<HTMLElement>('[data-submit-hint]');
+
+    const syncSubmitState = () => {
+      if (!submit) return;
+      const gaps = missing();
+      const ready = gaps.length === 0 && badlyFilled().length === 0;
+
+      submit.setAttribute('aria-disabled', String(!ready));
+
+      if (!hint) return;
+      if (ready) {
+        hint.hidden = true;
+        hint.textContent = '';
+        return;
+      }
+
+      const wrong = badlyFilled().filter((name) => !gaps.includes(name));
+      const parts: string[] = [];
+      if (gaps.length) parts.push('Still needed: ' + gaps.map(labelFor).join(', ') + '.');
+      if (wrong.length) parts.push('Please check ' + wrong.map(labelFor).join(' and ') + '.');
+
+      hint.hidden = false;
+      hint.textContent = parts.join(' ');
+    };
+
     Object.keys(RULES).forEach((name) => {
       const input = fieldFor(name);
       if (!input) return;
 
-      input.addEventListener('blur', () => validate(name));
+      input.addEventListener('blur', () => {
+        validate(name);
+        syncSubmitState();
+      });
       input.addEventListener('input', () => {
         if (input.getAttribute('aria-invalid') === 'true') validate(name);
+        syncSubmitState();
       });
     });
+
+    syncSubmitState();
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
@@ -426,6 +527,7 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
         fieldFor(firstBad)?.focus();
         status.textContent = 'Please check the highlighted fields above.';
         status.hidden = false;
+        syncSubmitState();
         return;
       }
 
@@ -472,6 +574,7 @@ const { headingLevel: Heading = 'h2', id = 'enquiry' } = Astro.props;
       } finally {
         submit.disabled = false;
         submitLabel.textContent = 'Send my enquiry';
+        syncSubmitState();
       }
     });
   });
